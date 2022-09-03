@@ -1,0 +1,8 @@
+Create dataloader for CIFAR10
+Patchifier in dataloader DONE
+Linear Projection of Flattened Patches
+Position embeddings
+Transformer encoder
+
+
+16x16x3 -> 768
