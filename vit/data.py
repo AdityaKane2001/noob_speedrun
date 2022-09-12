@@ -17,8 +17,8 @@ def get_transform(*, train=True, dim=16):
             [
                 T.RandomResizedCrop((224, 224)),
                 T.ToTensor(),
-                T.Lambda(get_patches_transform),
-                T.Lambda(flatten),
+                T.Lambda(get_patches_transform), # (batch_size, num_patches, patch_side, patch_side, channels)
+                T.Lambda(flatten), # (batch_size, num_patches, patch_side * patch_side * channels) -> nn.Linear() -> (batch_size, num_patches, hidden_dims)
             ]
         )
         return transforms
