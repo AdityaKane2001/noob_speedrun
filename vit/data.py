@@ -1,11 +1,16 @@
 from functools import partial
 import torch
+torch.manual_seed(0)
+import random
+random.seed(0)
+import numpy as np
+np.random.seed(0)
 from torch.utils.data import Dataset, DataLoader
 import torchvision
 from torchvision import transforms as T
 from torchvision.datasets import CIFAR10
 from patchify import get_patches
-
+from model import ViT
 
 def flatten(patch):
     return torch.flatten(patch, start_dim=1)
@@ -15,7 +20,7 @@ def get_transform(*, train=True, dim=16):
     if train:
         transforms = T.Compose(
             [
-                T.RandomResizedCrop((224, 224)),
+                # T.RandomResizedCrop((224, 224)),
                 T.ToTensor(),
                 T.Lambda(get_patches_transform), # (batch_size, num_patches, patch_side, patch_side, channels)
                 T.Lambda(flatten), # (batch_size, num_patches, patch_side * patch_side * channels) -> nn.Linear() -> (batch_size, num_patches, hidden_dims)
@@ -40,9 +45,7 @@ test_ds = CIFAR10(
     root="./cifar10", train=False, download=True, transform=get_transform(train=False)
 )
 
-train_dl = DataLoader(train_ds, shuffle=True, batch_size=32, drop_last=True)
-test_dl = DataLoader(test_ds, shuffle=False, batch_size=32, drop_last=True)
-
-for i in train_dl:
-    print(i[0].shape)
-    break
+def get_data(tr_bs=1024, te_bs=1024):
+    train_dl = DataLoader(train_ds, shuffle=True, batch_size=tr_bs, drop_last=True)
+    test_dl = DataLoader(test_ds, shuffle=False, batch_size=te_bs, drop_last=True)
+    return train_dl, test_dl

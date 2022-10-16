@@ -1,9 +1,7 @@
 # import numpy as np
 import torch
-import torch.nn.functional as F
 
 CIFAR_RES = 32
-
 
 def get_patches(image, dim=16):
     # CIFAR-10 has 32x32
@@ -21,7 +19,6 @@ def get_patches(image, dim=16):
     # print(f"Final Patches Shape is: {final_patches.shape}")
     return final_patches
     # (4, 3, 16, 16)
-
 
 if __name__ == "__main__":
     image = torch.randn(3, 32, 32)
