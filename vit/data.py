@@ -37,15 +37,24 @@ def get_transform(*, train=True, dim=16):
         )
         return transforms
 
-
-train_ds = CIFAR10(
-    root="./cifar10", train=True, download=True, transform=get_transform()
-)
-test_ds = CIFAR10(
-    root="./cifar10", train=False, download=True, transform=get_transform(train=False)
-)
-
 def get_data(tr_bs=1024, te_bs=1024):
+    train_ds = CIFAR10(
+        root="./cifar10", train=True, download=True, transform=get_transform()
+    )
+    test_ds = CIFAR10(
+        root="./cifar10", train=False, download=True, transform=get_transform(train=False)
+    )
+    train_dl = DataLoader(train_ds, shuffle=True, batch_size=tr_bs, drop_last=True)
+    test_dl = DataLoader(test_ds, shuffle=False, batch_size=te_bs, drop_last=True)
+    return train_dl, test_dl
+
+def get_data_cnn(tr_bs=1024, te_bs=1024):
+    train_ds = CIFAR10(
+        root="./cifar10", train=True, download=True, transform=T.ToTensor()
+    )
+    test_ds = CIFAR10(
+        root="./cifar10", train=False, download=True, transform=T.ToTensor()
+    )
     train_dl = DataLoader(train_ds, shuffle=True, batch_size=tr_bs, drop_last=True)
     test_dl = DataLoader(test_ds, shuffle=False, batch_size=te_bs, drop_last=True)
     return train_dl, test_dl
